@@ -1,7 +1,25 @@
 import { Box, Button, Paper, TextField, Typography } from "@mui/material";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
 const Register = () => {
+
+  const [formData, setFormData] = useState({})
+
+  const handelChange = (event) => {
+    setFormData(
+      {
+        ...formData,
+        [event.target.name]: event.target.value
+      }
+    )
+    console.log(formData);
+  }
+
+  const handleSubmit = (event) => {
+    event.preventDefault()
+  }
+
   return (
     <Box
       sx={{
@@ -21,12 +39,14 @@ const Register = () => {
         <Typography variant="h4" sx={{ textAlign: "center" }}>
           Registration
         </Typography>
-        <form>
+        <form onSubmit={handleSubmit}>
           <TextField
             label="Username"
             name="username"
             fullWidth
             margin="normal"
+            onChange={handelChange}
+            value={formData.username}
             required
           />
           <TextField
@@ -34,23 +54,29 @@ const Register = () => {
             name="name"
             fullWidth
             margin="normal"
+            onChange={handelChange}
+            value={formData.name}
             required
           />
           <TextField
             label="Date of birth"
             type="date"
-            name="username"
+            name="dob"
             InputLabelProps={{ shrink: true }}
             fullWidth
             margin="normal"
+            onChange={handelChange}
+            value={formData.dob}
             required
           />
           <TextField
             label="Phone Number"
             type="tel"
-            name="username"
+            name="phone"
             fullWidth
             margin="normal"
+            onChange={handelChange}
+            value={formData.phone}
             required
           />
           <TextField
@@ -59,6 +85,8 @@ const Register = () => {
             name="email"
             fullWidth
             margin="normal"
+            onChange={handelChange}
+            value={formData.email}
             required
           />
           <TextField
@@ -67,6 +95,8 @@ const Register = () => {
             type="password"
             fullWidth
             margin="normal"
+            onChange={handelChange}
+            value={formData.password}
             required
           />
           <Button
