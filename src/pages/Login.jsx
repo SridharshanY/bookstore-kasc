@@ -1,7 +1,28 @@
 import { Box, Button, Paper, TextField, Typography } from "@mui/material";
+import axios from "axios";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
 const Login = () => {
+
+  const [formData, setFormData] = useState({})
+
+  const handleChange = (event) => {
+    setFormData(
+      {
+        ...formData,
+        [event.target.name]: event.target.value
+      }
+    )
+  }
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const result = await axios.post('http://localhost:3000/api/user/login', formData)
+    alert(result.data.message)
+    localStorage.setItem("authToken", result.data.authToken)
+  }
+
   return (
     <Box
       sx={{
@@ -19,15 +40,17 @@ const Login = () => {
         }}
       >
         <Typography variant="h4" sx={{ textAlign: "center" }}>
-          Registration
+          Login
         </Typography>
-        <form>
+        <form onSubmit={handleSubmit}>
           <TextField
             label="Email ID"
             type="email"
             name="email"
             fullWidth
             margin="normal"
+            onChange={handleChange}
+            value={formData.email}
             required
           />
           <TextField
@@ -36,6 +59,8 @@ const Login = () => {
             type="password"
             fullWidth
             margin="normal"
+            onChange={handleChange}
+            value={formData.password}
             required
           />
           <Button

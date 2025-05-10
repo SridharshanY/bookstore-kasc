@@ -1,10 +1,21 @@
-import { Box, Button, Paper, TextField, Typography } from "@mui/material";
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Alert, Box, Button, Paper, Snackbar, TextField, Typography } from "@mui/material";
+import axios from "axios";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 const Register = () => {
 
   const [formData, setFormData] = useState({})
+  const [isOpen, setIsOpen] = useState(false)
+
+  const navigate = useNavigate()
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setIsOpen(false);
+  };
 
   const handelChange = (event) => {
     setFormData(
@@ -13,11 +24,16 @@ const Register = () => {
         [event.target.name]: event.target.value
       }
     )
-    console.log(formData);
   }
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async(event) => {
     event.preventDefault()
+    try{
+      await axios.post('http://localhost:3000/api/user/register', formData)
+      navigate('/login')      
+    }catch(error){
+      console.log(error)
+    }
   }
 
   return (
@@ -114,6 +130,16 @@ const Register = () => {
           </Button>
         </form>
       </Paper>
+      <Snackbar open={isOpen} autoHideDuration={6000} onClose={handleClose}>
+        <Alert
+          severity="success"
+          variant="filled"
+          sx={{ width: '100%' }}
+          onClose={handleClose}
+        >
+          User Registered Successfully
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };
